@@ -9,6 +9,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.HandlerThread;
+import android.os.android.os.Handler;
 
 import com.facebook.infer.annotation.Assertions;
 
