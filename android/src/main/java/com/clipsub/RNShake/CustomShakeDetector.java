@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.HandlerThread;
 
 import com.facebook.infer.annotation.Assertions;
 
@@ -16,6 +17,7 @@ import com.facebook.infer.annotation.Assertions;
  */
 public class CustomShakeDetector implements SensorEventListener {
 
+  private static final String HANDLER_THREAD_NAME_SENSOR = "sensorThread";
   //only record and consider the last MAX_SAMPLES number of data points
   private static final int MAX_SAMPLES = 40;
   //collect sensor data in this interval (nanoseconds)
@@ -69,7 +71,10 @@ public class CustomShakeDetector implements SensorEventListener {
       mCurrentIndex = 0;
       mMagnitudes = new double[MAX_SAMPLES];
       mTimestamps = new long[MAX_SAMPLES];
-      mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+      HandlerThread handlerThread = new HandlerThread(HANDLER_THREAD_NAME_SENSOR);
+      handlerThread.start();
+      Handler handler = new Handler(handlerThread.getLooper());
+      mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST, handler);
       mNumShakes = 0;
       mLastShakeTimestamp = 0;
     }
