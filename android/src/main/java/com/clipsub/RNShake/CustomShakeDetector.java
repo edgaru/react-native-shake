@@ -10,6 +10,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.HandlerThread;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.content.Context;
 
 import com.facebook.infer.annotation.Assertions;
 
@@ -35,6 +37,8 @@ public class CustomShakeDetector implements SensorEventListener {
   private static final float SHAKING_WINDOW_NS =
       TimeUnit.NANOSECONDS.convert(3, TimeUnit.SECONDS);
 
+  PowerManager wakeLock;
+  
   public static interface ShakeListener {
     void onShake();
   }
@@ -66,7 +70,10 @@ public class CustomShakeDetector implements SensorEventListener {
   public void start(SensorManager manager) {
     Assertions.assertNotNull(manager);
     Sensor accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    PowerManager mgr = (PowerManager)this.getSystemService(Context.POWER_SERVICE);
+    this.wakeLock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP , "MyWakeLock");
     if (accelerometer != null) {
+      this.acquire();
       mSensorManager = manager;
       mLastTimestamp = -1;
       mCurrentIndex = 0;
@@ -88,6 +95,7 @@ public class CustomShakeDetector implements SensorEventListener {
     if (mSensorManager != null) {
       mSensorManager.unregisterListener(this);
       mSensorManager = null;
+      this.release();
     }
   }
 
