@@ -15,7 +15,7 @@ public class RNShakeEventModule extends ReactContextBaseJavaModule {
 
   public RNShakeEventModule(final ReactApplicationContext reactContext) {
     super(reactContext);
-    mShakeDetector = new CustomShakeDetector(new CustomShakeDetector.ShakeListener() {
+    mShakeDetector = new CustomShakeDetector(reactContext, new CustomShakeDetector.ShakeListener() {
       @Override
       public void onShake() {
         sendEvent(reactContext, "ShakeEvent", null);
