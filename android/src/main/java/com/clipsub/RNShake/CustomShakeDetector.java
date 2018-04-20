@@ -38,6 +38,7 @@ public class CustomShakeDetector implements SensorEventListener {
       TimeUnit.NANOSECONDS.convert(3, TimeUnit.SECONDS);
 
   private PowerManager.WakeLock wakeLock;
+  private Context context;
   
   public static interface ShakeListener {
     void onShake();
