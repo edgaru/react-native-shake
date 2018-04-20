@@ -70,10 +70,10 @@ public class CustomShakeDetector implements SensorEventListener {
   public void start(SensorManager manager) {
     Assertions.assertNotNull(manager);
     Sensor accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-    PowerManager mgr = (PowerManager)this.getSystemService(Context.POWER_SERVICE);
+    PowerManager mgr = (PowerManager)getSystemService(Context.POWER_SERVICE);
     this.wakeLock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP , "MyWakeLock");
     if (accelerometer != null) {
-      this.acquire();
+      this.wakeLock.acquire();
       mSensorManager = manager;
       mLastTimestamp = -1;
       mCurrentIndex = 0;
@@ -95,7 +95,7 @@ public class CustomShakeDetector implements SensorEventListener {
     if (mSensorManager != null) {
       mSensorManager.unregisterListener(this);
       mSensorManager = null;
-      this.release();
+      this.wakeLock.release();
     }
   }
 
