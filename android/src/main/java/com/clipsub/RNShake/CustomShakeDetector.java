@@ -57,8 +57,7 @@ public class CustomShakeDetector implements SensorEventListener {
   private int mMinNumShakes;
 
   public CustomShakeDetector(Context context, ShakeListener listener) {
-    this(listener, 1);
-    this.context = context;
+    this(context, listener, 1);
   }
 
   public CustomShakeDetector(Context context, ShakeListener listener, int minNumShakes) {
